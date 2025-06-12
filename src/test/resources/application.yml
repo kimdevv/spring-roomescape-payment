@@ -30,3 +30,7 @@ security:
 
 payment:
   secret-key: "test_secret"
+  connect-timeout-second: 3
+  read-timeout-second: 1
+  base-url: "https://api.tosspayments.com"
+  approve-uri: "/v1/payments/confirm"

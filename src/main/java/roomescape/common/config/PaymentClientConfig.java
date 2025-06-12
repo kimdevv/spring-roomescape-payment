@@ -1,5 +1,6 @@
 package roomescape.common.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.client.RestClientCustomizer;
 import org.springframework.context.annotation.Bean;
@@ -15,9 +16,8 @@ import java.time.Duration;
 @EnableConfigurationProperties(PaymentClientProperties.class)
 public class PaymentClientConfig {
 
-    public static final int REQUEST_CONNECT_TIMEOUT_SECOND = 3;
-    public static final int REQUEST_READ_TIMEOUT_SECOND = 1;
-    public static final String TOSS_PAYMENTS_BASE_URL = "https://api.tosspayments.com";
+    @Autowired
+    PaymentClientProperties paymentClientProperties;
 
     @Bean
     public RestClientCustomizer restClientCustomizer() {
@@ -27,15 +27,15 @@ public class PaymentClientConfig {
 
     private SimpleClientHttpRequestFactory generateTimeoutRequestFactory() {
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
-        requestFactory.setConnectTimeout(Duration.ofSeconds(REQUEST_CONNECT_TIMEOUT_SECOND));
-        requestFactory.setReadTimeout(Duration.ofSeconds(REQUEST_READ_TIMEOUT_SECOND));
+        requestFactory.setConnectTimeout(Duration.ofSeconds(paymentClientProperties.getConnectTimeoutSecond()));
+        requestFactory.setReadTimeout(Duration.ofSeconds(paymentClientProperties.getReadTimeoutSecond()));
         return requestFactory;
     }
 
     @Bean
     public RestClient paymentRestClient(RestClient.Builder restClientBuilder) {
         return restClientBuilder
-                .baseUrl(TOSS_PAYMENTS_BASE_URL)
+                .baseUrl(paymentClientProperties.getBaseUrl())
                 .build();
     }
 

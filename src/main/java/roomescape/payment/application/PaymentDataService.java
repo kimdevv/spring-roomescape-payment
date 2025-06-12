@@ -1,6 +1,7 @@
 package roomescape.payment.application;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import roomescape.payment.domain.Payment;
 import roomescape.payment.domain.ProductType;
 import roomescape.payment.exception.PaymentKeyDuplicatedException;
@@ -15,6 +16,7 @@ public class PaymentDataService {
         this.paymentRepository = paymentRepository;
     }
 
+    @Transactional
     public Payment save(Payment payment) {
         if (paymentRepository.existsByPaymentKey(payment.getPaymentKey())) {
             throw new PaymentKeyDuplicatedException("중복된 paymentKey입니다.");

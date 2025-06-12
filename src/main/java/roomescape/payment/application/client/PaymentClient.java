@@ -32,7 +32,7 @@ public class PaymentClient {
     public PaymentApproveResponse approvePayment(final PaymentApproveRequest paymentApproveRequest) {
         try {
             return restClient.post()
-                    .uri("/v1/payments/confirm")
+                    .uri(paymentClientProperties.getApproveUri())
                     .header(AUTHORIZATION, "Basic " + toBase64(paymentClientProperties.getSecretKey() + ":"))
                     .body(paymentApproveRequest)
                     .retrieve()
